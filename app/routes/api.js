@@ -1,6 +1,6 @@
 var User = require('../models/user');
 var jwt = require('jsonwebtoken');
-var secret='harrypotter';
+var secret = 'harrypotter';
 module.exports = function(router) {
    //Create Post Route
    //USER REGISTRATION ROUTE
@@ -64,14 +64,16 @@ module.exports = function(router) {
                      message: "Could not Authenticate Password !"
                   });
                } else {
-                  var token=jwt.sign({
-                     username:user.username,
-                     email:user.email
-                  }, secret, { expiresIn: '24h' });
+                  var token = jwt.sign({
+                     username: user.username,
+                     email: user.email
+                  }, secret, {
+                     expiresIn: '24h'
+                  });
                   res.json({
                      success: true,
                      message: "User Authenticated",
-                     token:token
+                     token: token
                   });
                }
             }
