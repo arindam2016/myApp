@@ -73,84 +73,100 @@ module.exports = function(router) {
          });
       };
    });
-   //USER LOGIN ROUTE
-   //http://localhost:8080/api/authenticate
-   router.post('/authenticate', function(req, res) {
-      if (req.body.username) {
-         User.findOne({
-            username: req.body.username
-         }).select('email username password').exec(function(err, user) {
-            if (err) {
+   // //USER LOGIN ROUTE
+   // //http://localhost:8080/api/authenticate
+   // router.post('/authenticate', function(req, res) {
+   //    if (req.body.username) {
+   //       User.findOne({
+   //          username: req.body.username
+   //       }).select('username').exec(function(err, user) {
+   //          if (err) {
+   //             res.json({
+   //                success: false,
+   //                message: err
+   //             });
+   //          }
+   //       });
+   //    });
+   // });
+//USER LOGIN ROUTE
+//http://localhost:8080/api/authenticate
+router.post('/authenticate', function(req, res) {
+   if (req.body.username) {
+      User.findOne({
+         username: req.body.username
+      }).select('email username password').exec(function(err, user) {
+         if (err) {
+            res.json({
+               success: false,
+               message: err
+            });
+         }
+         if (!user) {
+            res.json({
+               success: false,
+               message: "Could not Authenticate user !"
+            });
+         } else if (user) {
+            if (req.body.password) {
+               var validPassword = user.comparePassword(req.body.password);
+            } else {
                res.json({
                   success: false,
-                  message: err
+                  message: "No Password Provided!"
                });
             }
-            if (!user) {
+            if (!validPassword) {
                res.json({
                   success: false,
-                  message: "Could not Authenticate user !"
-               });
-            } else if (user) {
-               if (req.body.password) {
-                  var validPassword = user.comparePassword(req.body.password);
-               } else {
-                  res.json({
-                     success: false,
-                     message: "No Password Provided!"
-                  });
-               }
-               if (!validPassword) {
-                  res.json({
-                     success: false,
-                     message: "Could not Authenticate Password !"
-                  });
-               } else {
-                  var token = jwt.sign({
-                     username: user.username,
-                     email: user.email
-                  }, secret, {
-                     expiresIn: '24h'
-                  });
-                  res.json({
-                     success: true,
-                     message: "User Authenticated",
-                     token: token
-                  });
-               }
-            }
-         });
-      } else {
-         res.json({
-            success: false,
-            message: "No user name Provided"
-         });
-      }
-   });
-   router.use(function(req, res, next) {
-      var token = req.body.token || req.body.query || req.headers['x-access-token'];
-      if (token) {
-         jwt.verify(token, secret, function(err, decoded) {
-            if (err) {
-               res.json({
-                  success: false,
-                  message: "Invalid token"
+                  message: "Could not Authenticate Password !"
                });
             } else {
-               req.decoded = decoded;
-               next();
+               var token = jwt.sign({
+                  username: user.username,
+                  email: user.email
+               }, secret, {
+                  expiresIn: '24h'
+               });
+               res.json({
+                  success: true,
+                  message: "User Authenticated",
+                  token: token
+               });
             }
-         });
-      } else {
-         res.json({
-            success: false,
-            message: "No token Provided"
-         });
-      }
-   });
-   //http://localhost:8080/api/me
-   router.post('/me', function(req, res) {
-      res.send(req.decoded);
-   });
-   return router;
+         }
+      });
+   } else {
+      res.json({
+         success: false,
+         message: "No user name Provided"
+      });
+   }
+});
+router.use(function(req, res, next) {
+   var token = req.body.token || req.body.query || req.headers['x-access-token'];
+   if (token) {
+      jwt.verify(token, secret, function(err, decoded) {
+         if (err) {
+            res.json({
+               success: false,
+               message: "Invalid token"
+            });
+         } else {
+            req.decoded = decoded;
+            next();
+         }
+      });
+   } else {
+      res.json({
+         success: false,
+         message: "No token Provided"
+      });
+   }
+});
+//http://localhost:8080/api/me
+router.post('/me', function(req, res) {
+   res.send(req.decoded);
+});
+return router;
 }
