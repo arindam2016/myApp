@@ -2,58 +2,58 @@
 <html lang="en">
 
 <head>
-   <base href="/" />
-   <meta charset="utf-8" />
-   <meta content="IE=edge" http-equiv="X-UA-Compatible" />
-   <meta content="width=device-width, initial-scale=1" name="viewport" />
-   <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-   <meta content="" name="description" />
-   <meta content="" name="author" />
-   <title>
-      Starter Template for Bootstrap
-   </title>
-   <!-- Bootstrap core CSS -->
-   <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
-   <link href="assets/css/style.css" rel="stylesheet" />
-   <link href="assets/css/animate.css" rel="stylesheet" />
+    <base href="/" />
+    <meta charset="utf-8" />
+    <meta content="IE=edge" http-equiv="X-UA-Compatible" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+    <title>
+        Starter Template for Bootstrap
+    </title>
+    <!-- Bootstrap core CSS -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="assets/css/style.css" rel="stylesheet" />
+    <link href="assets/css/animate.css" rel="stylesheet" />
 
-   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-   <!--[if lt IE 9]>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
       <![endif]-->
-   <!--Load Angular Js-->
-   <script src="assets/js/angular.min.js" type="text/javascript">
-   </script>
-   <script src="assets/js/angular-route.min.js" type="text/javascript">
-   </script>
-   <script src="assets/js/angular-animate.min.js" type="text/javascript">
-   </script>
-   <!--Angular Config/Routes Load-->
-   <script src="app/application.js" type="text/javascript">
-   </script>
-   <script src="app/routes.js" type="text/javascript">
-   </script>
-   <!--Angular Controllers Load-->
-   <script src="app/controllers/userCtrl.js" type="text/javascript">
-   </script>
-   <script src="app/controllers/mainCtrl.js" type="text/javascript">
-   </script>
-   <!--Angular Services Load-->
-   <script src="app/services/userServices.js" type="text/javascript">
-   </script>
-   <script src="app/services/authServices.js" type="text/javascript">
-   </script>
+    <!--Load Angular Js-->
+    <script src="assets/js/angular.min.js" type="text/javascript">
+    </script>
+    <script src="assets/js/angular-route.min.js" type="text/javascript">
+    </script>
+    <script src="assets/js/angular-animate.min.js" type="text/javascript">
+    </script>
+    <!--Angular Config/Routes Load-->
+    <script src="app/application.js" type="text/javascript">
+    </script>
+    <script src="app/routes.js" type="text/javascript">
+    </script>
+    <!--Angular Controllers Load-->
+    <script src="app/controllers/userCtrl.js" type="text/javascript">
+    </script>
+    <script src="app/controllers/mainCtrl.js" type="text/javascript">
+    </script>
+    <!--Angular Services Load-->
+    <script src="app/services/userServices.js" type="text/javascript">
+    </script>
+    <script src="app/services/authServices.js" type="text/javascript">
+    </script>
 </head>
 
 </html>
 
-<body ng-app="userApp" ng-controller="mainCtrl as main">
-   <!-- Fixed navbar -->
-   <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-         <div class="navbar-header">
-            <button aria-controls="navbar" aria-expanded="false" class="navbar-toggle collapsed" data-target="#navbar" data-toggle="collapse" type="button">
+<body ng-app="userApp" ng-controller="mainCtrl as main" ng-show="main.loadMe" ng-cloak>
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button aria-controls="navbar" aria-expanded="false" class="navbar-toggle collapsed" data-target="#navbar" data-toggle="collapse" type="button">
                <span class="sr-only">
                   Toggle navigation
                </span>
@@ -64,76 +64,86 @@
                <span class="icon-bar">
                </span>
             </button>
-            <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="#">
                Bootstrap theme
             </a>
-         </div>
-         <div class="navbar-collapse collapse" id="navbar">
-            <ul class="nav navbar-nav">
-               <li class="active">
-                  <a href="/">
+            </div>
+            <div class="navbar-collapse collapse" id="navbar">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="/">
                      Home
                   </a>
-               </li>
-               <li>
-                  <a href="/login">
-                     User Login
+                    </li>
+                    <li ng-show="!main.isLoggedIn">
+                        <a href="/login">
+                            User Login
+                        </a>
+                    </li>
+                    <li ng-show="main.isLoggedIn">
+                        <a href="#" ng-click="main.logout()">
+                     Logout
                   </a>
-               </li>
-               <li>
-                  <a href="/register">
+                    </li>
+                    <li ng-show="!main.isLoggedIn">
+                        <a href="/register">
                      Register
                   </a>
-               </li>
-               <li class="dropdown">
-                  <a aria-expanded="false" aria-haspopup="true" class="dropdown-toggle" data-toggle="dropdown" href="#" role="button">
+                    </li>
+                    <li class="dropdown">
+                        <a aria-expanded="false" aria-haspopup="true" class="dropdown-toggle" data-toggle="dropdown" href="#" role="button">
                      Dropdown
                      <span class="caret">
                      </span>
                   </a>
-                  <ul class="dropdown-menu">
-                     <li>
-                        <a href="#">
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#">
                            Action
                         </a>
-                     </li>
-                     <li>
-                        <a href="#">
+                            </li>
+                            <li>
+                                <a href="#">
                            Another action
                         </a>
-                     </li>
-                     <li>
-                        <a href="#">
+                            </li>
+                            <li>
+                                <a href="#">
                            Something else here
                         </a>
-                     </li>
-                     <li class="divider" role="separator">
-                     </li>
-                     <li class="dropdown-header">
-                        Nav header
-                     </li>
-                     <li>
-                        <a href="#">
-                           Separated link
-                        </a>
-                     </li>
-                     <li>
-                        <a href="#">
-                           One more separated link
-                        </a>
-                     </li>
-                  </ul>
-               </li>
-            </ul>
-         </div>
-         <!--/.nav-collapse -->
-      </div>
-   </nav>
-   <div class="container container-fluid" ng-view="">
-   </div>
-   <script src="assets/js/jquery-3.1.1.min.js" type="text/javascript">
-   </script>
-   <!-- Bootstrap core JavaScript-->
-   <script src="assets/js/bootstrap.min.js" type="text/javascript">
-   </script>
+                            </li>
+                            <li class="divider" role="separator">
+                            </li>
+                            <li class="dropdown-header">
+                                Nav header
+                            </li>
+                            <li>
+                                <a href="#">
+                                    Separated link
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    One more separated link
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li ng-show="main.isLoggedIn">
+                        <a href="/profile">
+                     Hello {{main.username}}
+                  </a>
+                    </li>
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+    </nav>
+    <div class="container container-fluid" ng-view="">
+    </div>
+    <script src="assets/js/jquery-3.1.1.min.js" type="text/javascript">
+    </script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="assets/js/bootstrap.min.js" type="text/javascript">
+    </script>
 </body>

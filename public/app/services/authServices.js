@@ -4,7 +4,7 @@ app.factory('Auth', ['$http', 'AuthToken', function($http, AuthToken) {
    //Auth.login(loginData);
    authFactory.login = function(loginData) {
       return $http.post('/api/authenticate', loginData).then(function(response) {
-         console.log(response.data.token);
+         //console.log(response.data.token);
          AuthToken.setToken(response.data.token);
          return response;
       });
@@ -17,6 +17,20 @@ app.factory('Auth', ['$http', 'AuthToken', function($http, AuthToken) {
          return false;
       }
    };
+   //Auth.getUser();
+   authFactory.getUser = function() {
+      if (AuthToken.getToken()) {
+         return $http.post('/api/me');
+      } else {
+         $q.reject({
+            message: "User Has No Token"
+         });
+      }
+   };
+   //Auth.logout();
+   authFactory.logout = function() {
+      AuthToken.setToken();
+   };
    return authFactory;
 }]);
 app.factory('AuthToken', [function() {
@@ -24,13 +38,28 @@ app.factory('AuthToken', [function() {
 
    //AuthToken.setToken(token);
    authTokenFactory.setToken = function(token) {
-      window.localStorage.setItem('token', token);
-   };
+      if (token) {
+         window.localStorage.setItem('token', token);
+      } else {
+         window.localStorage.removeItem('token');
+      }
 
+   };
    //AuthToken.getToken();
    authTokenFactory.getToken = function() {
       return window.localStorage.getItem('token');
    };
 
    return authTokenFactory;
+}]);
+app.factory('AuthInterceptors', ['AuthToken',function(AuthToken) {
+   var authInterceptorsFactory = {};
+   authInterceptorsFactory.request = function(config) {
+      var token = AuthToken.getToken();
+      if (token) {
+         config.headers['x-access-token'] = token;
+      }
+      return config;
+   };
+   return authInterceptorsFactory;
 }]);

@@ -1,9 +1,10 @@
-angular.module('userControllers', ['userServices'])
-   .controller('regCtrl', ['$http', '$location', '$timeout', 'User', function($http, $location, $timeout, User) {
-      app = this;
-      this.regUser = function(regData) {
-         app.errorMsg = false;
-         app.loading = true;
+var app = angular.module('userControllers', ['userServices']);
+app.controller('regCtrl', ['$http', '$location', '$timeout', 'User', function($http, $location, $timeout, User) {
+   app = this;
+   this.regUser = function(regData,valid) {
+      app.errorMsg = false;
+      app.loading = true;
+      if (valid) {
          User.create(app.regData).then(function(response) {
             if (response.data.success) {
                app.loading = false;
@@ -17,6 +18,10 @@ angular.module('userControllers', ['userServices'])
                   app.errorMsg = response.data.message;
                }, 1000);
             }
-         })
+         });
+      } else {
+         app.loading = false;
+         app.errorMsg = "Please ensure the form is fulfilled properly";
       }
-   }]);
+   }
+}]);
